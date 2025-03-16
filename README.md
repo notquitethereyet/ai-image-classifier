@@ -5,7 +5,7 @@ This project implements a deep learning model to distinguish between AI-generate
 ## Project Structure
 
 ```
-ai-image-classifier/
+ai_art_classifier/
 ├── data/                  # Dataset directory
 │   ├── train_data/        # Training images
 │   ├── test_data/         # Test images
@@ -32,7 +32,7 @@ ai-image-classifier/
 
 ### Prerequisites
 
-- Python 3.12
+- Python 3.8+
 - CUDA-compatible GPU with at least 8GB VRAM (recommended)
 
 ### Installation
@@ -82,12 +82,65 @@ This project uses the [Shutterstock Dataset for AI vs Human Generated Images](ht
 
 ## Model Architecture
 
-The default model uses a ResNet50 backbone pretrained on ImageNet, with a custom classifier head:
+The project implements a deep neural network for binary classification of images as either AI-generated (1) or human-made (0). At its core, the model uses transfer learning with state-of-the-art convolutional neural networks.
 
-- Backbone: ResNet50 (or optionally EfficientNet-B2 or ViT-B/16)
-- Custom classifier head with dropout for regularization
-- Binary classification using BCE with logits loss
-- Mixed precision training for improved performance
+### Base Architecture
+
+The default implementation uses ResNet50 as the backbone, but the code supports easy switching between:
+
+- **ResNet50**: Deep residual network with 50 layers that uses skip connections to solve the vanishing gradient problem
+- **EfficientNet-B2**: Compact and efficient network that uses compound scaling to balance depth, width, and resolution
+- **Vision Transformer (ViT-B/16)**: Transformer-based architecture that treats image patches as tokens for sequence modeling
+
+### Model Components
+
+1. **Backbone Network**:
+   - Pretrained on ImageNet for robust feature extraction
+   - Final classification layer removed to use as a feature extractor
+   - All layers fine-tuned during training (not frozen)
+
+2. **Custom Classification Head**:
+   ```
+   nn.Sequential(
+       nn.Dropout(0.3),           # Reduces overfitting
+       nn.Linear(features, 256),   # Dense layer with 256 neurons
+       nn.ReLU(),                 # Non-linear activation
+       nn.Dropout(0.2),           # Additional regularization
+       nn.Linear(256, 1)          # Output layer for binary classification
+   )
+   ```
+
+3. **Loss Function**: 
+   - BCE with Logits Loss, which combines a sigmoid activation and binary cross-entropy loss
+   - Provides numerical stability during training, especially with mixed precision
+
+4. **Regularization**:
+   - Dropout layers (0.3 and 0.2 rates)
+   - Weight decay in the optimizer (1e-5)
+   - Data augmentation in the training pipeline
+
+### Input Processing
+
+- Images resized to 224×224 pixels
+- Normalization using ImageNet mean and standard deviation
+- Data augmentation: random horizontal flips, rotations, and color jitter
+
+### Training Optimizations
+
+- **Mixed Precision Training**: Uses FP16 computation where appropriate to speed up training
+- **Gradient Scaling**: Prevents underflow in FP16 gradients
+- **Learning Rate Scheduling**: Cosine annealing or step decay
+- **Early Stopping**: Prevents overfitting by monitoring validation loss
+
+### Performance Considerations
+
+The model is optimized for CUDA execution on NVIDIA GPUs with at least 8GB VRAM. The architecture strikes a balance between:
+
+- **Accuracy**: By using sophisticated pretrained feature extractors
+- **Inference Speed**: Reasonable prediction time suitable for production
+- **Memory Usage**: Configurable batch size for different hardware constraints
+
+This architecture is particularly effective at picking up on subtle patterns that differentiate AI-generated from human-made artwork, including texture consistency, object boundaries, and compositional elements.
 
 ## Usage
 
@@ -149,7 +202,7 @@ Model and training parameters can be configured in `config.py`. Key options incl
 
 ## License
 
-Do what you want, dawg.
+[Include your license information here]
 
 ## Acknowledgements
 
