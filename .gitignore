@@ -1,0 +1,57 @@
+# Data directory
+data/
+test_data/
+train_data/
+
+# Saved models
+saved_models/
+*.pt
+*.pth
+
+# Generated prediction files
+predictions*.csv
+*submission*.csv
+evaluation/
+
+# Temporary files
+_temp_*.csv
+*.temp
+modified_*.csv
+
+# Log files
+logs/
+*.log
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual environment
+venv/
+ENV/
+env/
+
+# IDE files
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
