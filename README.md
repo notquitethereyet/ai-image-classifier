@@ -185,10 +185,36 @@ The prediction script:
 
 ## Results
 
-The model achieves:
-- Validation accuracy: ~XX%
-- Validation AUC: ~X.XX
-- F1 score: ~X.XX
+The model achieves excellent performance on the validation set:
+
+- **Accuracy**: 99.70%
+- **Precision**: 99.77%
+- **Recall**: 99.62%
+- **F1 Score**: 99.70%
+- **AUC**: 99.99%
+
+These metrics were achieved with the default threshold of 0.5. Further analysis found that an optimal threshold of 0.25 yields slightly better results:
+
+- **Accuracy**: 99.71%
+- **Precision**: 99.68%
+- **Recall**: 99.75%
+- **F1 Score**: 99.71%
+- **AUC**: 99.99%
+
+The extremely high performance metrics suggest the model is very effective at distinguishing between AI-generated and human-made artwork in this dataset. The nearly perfect AUC score indicates excellent separability between the two classes.
+
+The model was trained for 11 epochs before reaching optimal performance as determined by early stopping.
+
+### Visualization
+
+The evaluation process generates several visualizations that help understand model performance:
+
+- ROC curve (showing true positive rate vs false positive rate)
+- Precision-recall curve
+- Confusion matrix
+- Threshold analysis plot
+
+These plots are automatically saved in the evaluation directory when running the evaluation script.
 
 ## Configuration
 
@@ -202,7 +228,7 @@ Model and training parameters can be configured in `config.py`. Key options incl
 
 ## License
 
-[Include your license information here]
+Do what you want with this, dawg
 
 ## Acknowledgements
 
