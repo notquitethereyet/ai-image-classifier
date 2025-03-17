@@ -1,4 +1,4 @@
-# AI vs Human Art Classifier
+# AI vs Human Taken Classifier
 
 This project implements a deep learning model to distinguish between AI-generated and human-made artwork. Using transfer learning with state-of-the-art convolutional neural networks, the classifier achieves high accuracy in identifying subtle differences between AI and human artistic styles.
 
